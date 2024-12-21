@@ -112,9 +112,15 @@ public class TesseractTracker {
         }
         // Handle dirty references
         if(!SERVER.dirtyReferences.isEmpty()){
-            Tesseract.CHANNEL.sendToAllPlayers(new PacketAddTesseractReferences(new ArrayList<>(SERVER.dirtyReferences)));
+            Tesseract.CHANNEL.sendToAllPlayers(new PacketAddTesseractReferences(new ArrayList<>(SERVER.dirtyReferences), false));
             SERVER.dirtyReferences.clear();
         }
+    }
+
+    public void clear(){
+        if(this == SERVER)
+            throw new IllegalStateException("Server references cannot be cleared!");
+        this.tesseracts.clear();
     }
 
     public CompoundNBT writeKey(TesseractReference reference){
@@ -202,6 +208,6 @@ public class TesseractTracker {
 
     public static void sendReferences(PlayerEntity player){
         Collection<TesseractReference> references = SERVER.tesseracts.values().stream().map(Map::values).flatMap(Collection::stream).collect(Collectors.toList());
-        Tesseract.CHANNEL.sendToPlayer(player, new PacketAddTesseractReferences(references));
+        Tesseract.CHANNEL.sendToPlayer(player, new PacketAddTesseractReferences(references, true));
     }
 }
