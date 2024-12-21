@@ -55,9 +55,11 @@ public class TesseractTracker {
         if(reference != null)
             return reference;
         // Create a new reference
-        reference = new TesseractReference(referenceIndexCounter++, self);
-        if(this == SERVER)
+        if(this == SERVER){
+            reference = new TesseractReference(referenceIndexCounter++, self);
             this.markDirty(reference);
+        }else
+            reference = new TesseractReference(0, self);
         this.tesseracts.computeIfAbsent(dimension, o -> new HashMap<>()).put(pos, reference);
         return reference;
     }
@@ -179,7 +181,7 @@ public class TesseractTracker {
                         if(fileName.startsWith("tesseract") && fileName.endsWith(".nbt")){
                             try{
                                 long index = Long.parseLong(file.getFileName().toString().substring("tesseract".length(), file.getFileName().toString().length() - ".nbt".length()));
-                                if(index > referenceIndexCounter)
+                                if(index >= referenceIndexCounter)
                                     referenceIndexCounter = index + 1;
                                 CompoundNBT tag;
                                 try(DataInputStream input = new DataInputStream(Files.newInputStream(file))){
