@@ -15,9 +15,11 @@ import java.util.Collection;
 public class PacketAddTesseractReferences implements BasePacket {
 
     private Collection<TesseractReference> references;
+    private boolean clear;
 
-    public PacketAddTesseractReferences(Collection<TesseractReference> references){
+    public PacketAddTesseractReferences(Collection<TesseractReference> references, boolean clearExisting){
         this.references = references;
+        this.clear = clearExisting;
     }
 
     public PacketAddTesseractReferences(){
@@ -25,6 +27,7 @@ public class PacketAddTesseractReferences implements BasePacket {
 
     @Override
     public void write(PacketBuffer buffer){
+        buffer.writeBoolean(this.clear);
         buffer.writeInt(this.references.size());
         for(TesseractReference reference : this.references)
             buffer.writeCompoundTag(reference.write());
@@ -32,6 +35,7 @@ public class PacketAddTesseractReferences implements BasePacket {
 
     @Override
     public void read(PacketBuffer buffer){
+        this.clear = buffer.readBoolean();
         int size = buffer.readInt();
         this.references = new ArrayList<>(size);
         for(int i = 0; i < size; i++){
@@ -46,6 +50,8 @@ public class PacketAddTesseractReferences implements BasePacket {
 
     @Override
     public void handle(PacketContext context){
+        if(this.clear)
+            TesseractTracker.CLIENT.clear();
         for(TesseractReference reference : this.references)
             TesseractTracker.CLIENT.add(reference);
     }
