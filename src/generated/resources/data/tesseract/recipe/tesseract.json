@@ -6,15 +6,9 @@
     "ABA"
   ],
   "key": {
-    "A": {
-      "tag": "forge:obsidian"
-    },
-    "B": {
-      "tag": "forge:ender_pearls"
-    },
-    "C": {
-      "tag": "forge:storage_blocks/diamond"
-    }
+    "A": "#c:obsidians",
+    "B": "#c:ender_pearls",
+    "C": "#c:storage_blocks/diamond"
   },
   "result": {
     "id": "tesseract:tesseract"
