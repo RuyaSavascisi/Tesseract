@@ -69,5 +69,6 @@ public class Tesseract implements ModInitializer {
         handler.addGenerator(TesseractRecipeGenerator::new);
         handler.addGenerator(TesseractTagGenerator::new);
         handler.addGenerator(TesseractAtlasSourceGenerator::new);
+        handler.addGenerator(TesseractItemInfoGenerator::new);
     }
 }
